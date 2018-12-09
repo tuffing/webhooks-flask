@@ -13,12 +13,12 @@ def index():
 def gitpush(repo):
 	valid = False
 	
-	#for ranges in app.config['WHITELIST']:
-	#	if IPv4Address(request.environ.get('HTTP_X_REAL_IP', request.remote_addr)) in IPv4Network(ranges):
-	#		valid = True
+	for ranges in app.config['WHITELIST']:
+		if IPv4Address(request.environ.get('HTTP_X_REAL_IP', request.remote_addr)) in IPv4Network(ranges):
+			valid = True
 
-	#if not valid:
-	#	return 'invalid ip'
+	if not valid:
+		return 'invalid ip'
 
 	if repo not in app.config['REPOS']:
 		return 'no such repo'
