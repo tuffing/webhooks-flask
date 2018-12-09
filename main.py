@@ -1,5 +1,4 @@
 from flask import Flask, request
-#import git
 from ipaddress import IPv4Address, IPv4Network
 
 app = Flask(__name__)
@@ -28,10 +27,5 @@ def gitpush(repo):
 	    queue.write('%s\n' % repo)
 	queue.close()
 
-	#update local repo from it's source
-	#g = git.cmd.Git(app.config['GITPATH'] % repo)
-	#g.pull()
-
-	#g.push(app.config['GITURL'] % repo)
 
 	return app.config['GITURL'] % repo
