@@ -1,7 +1,8 @@
 from flask import Flask, request
 import git
+from ipaddress import IPv4Address, IPv4Network
+
 app = Flask(__name__)
-#app.config.from_object('yourapplication.default_settings')
 
 app.config.from_envvar('WEBHOOK_SETTINGS')
 
@@ -11,9 +12,13 @@ def index():
 
 @app.route('/gitpush/<repo>', methods=['GET', 'POST'])
 def gitpush(repo):
-	#return '%s gitpush' % repo
-	#return request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-	if request.environ.get('HTTP_X_REAL_IP', request.remote_addr) not in app.config['WHITELIST']:
+        valid = False
+        
+        for ranges in app.config['WHITELIST']:
+            if IPv4Address(request.environ.get('HTTP_X_REAL_IP', request.remote_addr)) in IPv4Network(ranges):
+                valid = True
+
+        if not valid:
 		return 'invalid ip'
 
 	if repo not in app.config['REPOS']:
